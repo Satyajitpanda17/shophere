@@ -1,9 +1,11 @@
 const express = require("express");
+const cors = require("cors");
 const mongoose = require("mongoose");
 const authRouter = require("./routes/auth");
 
 const PORT = 3000;
 const app = express();
+app.use(cors());
 
 const DB = "mongodb+srv://Satyajit:ShopHere%402025@shophere.l8snym3.mongodb.net/?retryWrites=true&w=majority&appName=ShopHere";
 
@@ -22,5 +24,5 @@ mongoose
   });
 
 // start server
-app.listen(3000, '0.0.0.0', () => console.log("Server running"));
+app.listen(3000, '0.0.0.0', () => console.log("Server running on port 3000"));
 
