@@ -1,6 +1,10 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shophere/common/widgets/bottom_nav_bar.dart';
 import 'package:shophere/constants/global_variables.dart';
+import 'package:shophere/features/admin/screens/admin_screen.dart';
 import 'package:shophere/features/auth/screens/auth_screen.dart';
 import 'package:shophere/features/auth/services/auth_service.dart';
 import 'package:shophere/features/home/screens/home_screen.dart';
@@ -26,11 +30,14 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    authService.getUserData(context);
+   authService.getUserData(context).then((_) {
+    setState(() {});  // rebuild so UI updates with user info
+  });
   }
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserProvider>(context).user;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
@@ -48,7 +55,11 @@ class _MyAppState extends State<MyApp> {
         useMaterial3: true,
       ),
       onGenerateRoute: (settings) => generateRoute(settings),
-      home: Provider.of<UserProvider>(context).user.token.isNotEmpty ? const HomeScreen() : const AuthScreen(),
+      home: user.token.trim().isNotEmpty
+        ? user.type.trim().toLowerCase() == 'admin'
+            ? AdminScreen()
+            : BottomNavBar()
+        : const AuthScreen(),
     );
   }
 }

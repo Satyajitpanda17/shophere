@@ -67,14 +67,23 @@ class AuthService{
     }
   }
 
-   void getUserData(
+ Future<void> getUserData(
     BuildContext context,
   )async {
     try{
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('x-auth-token');
+      final rp = await http.get(
+  Uri.parse('$uri/'),
+  headers: {
+    'Content-Type': 'application/json; charset=UTF-8',
+    'x-auth-token': token!,
+  },
+).timeout(Duration(seconds: 10));
+//print(rp.body);
       if(token == null){
-        prefs.setString('x-auth-token', '');}
+        prefs.setString('x-auth-token', '');
+        }
       var tokenRes = await http.post(Uri.parse('$uri/tokenIsValid'),
       headers: <String, String>{
           'Content-type': 'application/json; charset=UTF-8',

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shophere/constants/global_variables.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;
@@ -8,7 +9,7 @@ class CustomButton extends StatelessWidget {
     Key? key,
     required this.text,
     required this.onTap,
-    this.color,
+    this.color = GlobalVariables.secondaryColor,
   }) : super(key: key);
 
   @override
