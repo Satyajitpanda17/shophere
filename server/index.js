@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const authRouter = require("./routes/auth");
+const adminRouter = require("./routes/admin");
+const productRouter = require("./routes/product");
 
 const PORT = 3000;
 const app = express();
@@ -12,6 +14,8 @@ const DB = "mongodb+srv://Satyajit:ShopHere%402025@shophere.l8snym3.mongodb.net/
 // middleware
 app.use(express.json());
 app.use(authRouter);
+app.use(adminRouter);
+app.use(productRouter)
 
 // DB connection
 mongoose
