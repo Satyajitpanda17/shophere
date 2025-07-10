@@ -5,6 +5,9 @@ import 'package:shophere/features/admin/screens/admin_screen.dart';
 import 'package:shophere/features/auth/screens/auth_screen.dart';
 import 'package:shophere/features/home/screens/category_deals_screen.dart';
 import 'package:shophere/features/home/screens/home_screen.dart';
+import 'package:shophere/features/product_details/screens/product_details_screen.dart';
+import 'package:shophere/features/search/screens/search_screen.dart';
+import 'package:shophere/models/product.dart';
 
 Route<dynamic> generateRoute(RouteSettings routeSettings){
   switch(routeSettings.name){
@@ -33,6 +36,18 @@ Route<dynamic> generateRoute(RouteSettings routeSettings){
        return MaterialPageRoute(
       settings: routeSettings,
       builder: (_) => CategoryDealsScreen(category : category),
+      );
+      case SearchScreen.routeName :
+      var searchQuery = routeSettings.arguments as String;
+       return MaterialPageRoute(
+      settings: routeSettings,
+      builder: (_) => SearchScreen(searchQuery: searchQuery,),
+      );
+      case ProductDetailsScreen.routeName :
+      var product = routeSettings.arguments as Product;
+       return MaterialPageRoute(
+      settings: routeSettings,
+      builder: (_) => ProductDetailsScreen(product: product,),
       );
     default : return MaterialPageRoute(builder: (_) => const Scaffold(
       body: Center(child: Text('No such page exists'))

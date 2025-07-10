@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shophere/common/loader.dart';
 import 'package:shophere/constants/global_variables.dart';
 import 'package:shophere/features/home/services/home_services.dart';
+import 'package:shophere/features/product_details/screens/product_details_screen.dart';
 import 'package:shophere/models/product.dart';
 
 class CategoryDealsScreen extends StatefulWidget {
@@ -79,11 +80,11 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
                         final product = productList![index];
                         return GestureDetector(
                           onTap: () {
-                          // Navigator.pushNamed(
-                          //   context,
-                          //   ProductDetailScreen.routeName,
-                          //   arguments: product,
-                          // );
+                          Navigator.pushNamed(
+                            context,
+                            ProductDetailsScreen.routeName,
+                            arguments: product,
+                          );
                         },
                         child : Column(
                           children: [
