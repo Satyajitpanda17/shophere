@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shophere/common/widgets/bottom_nav_bar.dart';
+import 'package:shophere/features/address/screens/address_screen.dart';
 import 'package:shophere/features/admin/screens/add_product_screen.dart';
 import 'package:shophere/features/admin/screens/admin_screen.dart';
 import 'package:shophere/features/auth/screens/auth_screen.dart';
@@ -48,6 +49,12 @@ Route<dynamic> generateRoute(RouteSettings routeSettings){
        return MaterialPageRoute(
       settings: routeSettings,
       builder: (_) => ProductDetailsScreen(product: product,),
+      );
+      case AddressScreen.routeName : 
+      var totalAmount = routeSettings.arguments as String;
+      return MaterialPageRoute(
+      settings: routeSettings,
+      builder: (_) => AddressScreen(totalAmount: totalAmount,),
       );
     default : return MaterialPageRoute(builder: (_) => const Scaffold(
       body: Center(child: Text('No such page exists'))
