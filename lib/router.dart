@@ -6,8 +6,10 @@ import 'package:shophere/features/admin/screens/admin_screen.dart';
 import 'package:shophere/features/auth/screens/auth_screen.dart';
 import 'package:shophere/features/home/screens/category_deals_screen.dart';
 import 'package:shophere/features/home/screens/home_screen.dart';
+import 'package:shophere/features/order_details/screens/order_details_screen.dart';
 import 'package:shophere/features/product_details/screens/product_details_screen.dart';
 import 'package:shophere/features/search/screens/search_screen.dart';
+import 'package:shophere/models/order.dart';
 import 'package:shophere/models/product.dart';
 
 Route<dynamic> generateRoute(RouteSettings routeSettings){
@@ -55,6 +57,14 @@ Route<dynamic> generateRoute(RouteSettings routeSettings){
       return MaterialPageRoute(
       settings: routeSettings,
       builder: (_) => AddressScreen(totalAmount: totalAmount,),
+      );
+      case OrderDetailsScreen.routeName:
+      var order = routeSettings.arguments as Order;
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => OrderDetailsScreen(
+          order: order,
+        ),
       );
     default : return MaterialPageRoute(builder: (_) => const Scaffold(
       body: Center(child: Text('No such page exists'))

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shophere/constants/global_variables.dart';
 import 'package:shophere/features/account/widgets/below_app_bar.dart';
+import 'package:shophere/features/account/widgets/orders.dart';
 import 'package:shophere/features/account/widgets/top_buttons.dart';
 
 class AccountScreen extends StatelessWidget {
@@ -53,7 +54,7 @@ class AccountScreen extends StatelessWidget {
           SizedBox(height: 10),
           TopButtons(),
           SizedBox(height: 20),
-         // Orders(),
+         Orders(),
         ],
       ),
     );

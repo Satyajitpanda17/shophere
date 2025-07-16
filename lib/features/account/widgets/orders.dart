@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:shophere/common/loader.dart';
 import 'package:shophere/constants/global_variables.dart';
+import 'package:shophere/features/account/services/account_services.dart';
 import 'package:shophere/features/account/widgets/single_product.dart';
+import 'package:shophere/features/order_details/screens/order_details_screen.dart';
+import 'package:shophere/models/order.dart';
 
 class Orders extends StatefulWidget {
   const Orders({super.key});
@@ -10,10 +14,20 @@ class Orders extends StatefulWidget {
 }
 
 class _OrdersState extends State<Orders> {
-  List list = [];
+  List<Order>? orders;
+  final AccountServices accountServices = AccountServices();
+  @override
+  void initState() {
+    super.initState();
+    fetchOrders();
+  }
+void fetchOrders() async {
+   orders = await accountServices.fetchMyOrders(context: context);
+}
+
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return orders == null ? const Loader() : Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -47,9 +61,13 @@ class _OrdersState extends State<Orders> {
                 ),
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: list.length,
+                itemCount: orders!.length,
                 itemBuilder:(context,index){
-                  return SingleProduct(image: list[index]);
+                  return GestureDetector(
+                    onTap: (){
+                      Navigator.pushNamed(context, OrderDetailsScreen.routeName, arguments: orders![index]);
+                    },
+                    child: SingleProduct(image: orders![index].products[0].images[0]));
                 })
                 ),               
       ],

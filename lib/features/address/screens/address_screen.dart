@@ -5,6 +5,7 @@ import 'package:shophere/common/widgets/custom_button.dart';
 import 'package:shophere/common/widgets/custom_textfield.dart';
 import 'package:shophere/constants/global_variables.dart';
 import 'package:shophere/constants/utils.dart';
+import 'package:shophere/features/address/services/address_services.dart';
 import 'package:shophere/providers/user_provider.dart';
 
 class AddressScreen extends StatefulWidget {
@@ -31,6 +32,8 @@ final TextEditingController flatBuildingController = TextEditingController();
   List<PaymentItem> paymentItems = [];
    String addressToBeUsed = "";
 
+   final AddressServices addressServices = AddressServices();
+
   @override
   void initState() {
     super.initState();
@@ -54,18 +57,18 @@ final TextEditingController flatBuildingController = TextEditingController();
   }
 
    void onGooglePayResult(res) {
-    // if (Provider.of<UserProvider>(context, listen: false)
-    //     .user
-    //     .address
-    //     .isEmpty) {
-    //   addressServices.saveUserAddress(
-    //       context: context, address: addressToBeUsed);
-    // }
-    // addressServices.placeOrder(
-    //   context: context,
-    //   address: addressToBeUsed,
-    //   totalSum: double.parse(widget.totalAmount),
-    // );
+    if (Provider.of<UserProvider>(context, listen: false)
+        .user
+        .address
+        .isEmpty) {
+      addressServices.saveUserAddress(
+          context: context, address: addressToBeUsed);
+    }
+    addressServices.placeOrder(
+      context: context,
+      address: addressToBeUsed,
+      totalSum: double.parse(widget.totalAmount),
+    );
   }
 
   void payPressed(String addressFromProvider){
@@ -93,8 +96,8 @@ final TextEditingController flatBuildingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    var address = "A/190 Koelnagar";
-    //var address = context.watch<UserProvider>().user.address;
+    //var address = "A/190 Koelnagar";
+    var address = context.watch<UserProvider>().user.address;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
