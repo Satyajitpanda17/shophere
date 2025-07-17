@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shophere/features/account/services/account_services.dart';
 import 'package:shophere/features/account/widgets/account_button.dart';
 
 class TopButtons extends StatelessWidget {
@@ -25,7 +26,7 @@ class TopButtons extends StatelessWidget {
           children: [
             AccountButton(
               text: 'Log Out',
-              onTap: () {},
+              onTap: () => AccountServices().logout(context),
             ),
             AccountButton(
               text: 'Your Wish List',

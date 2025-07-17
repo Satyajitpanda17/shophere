@@ -3,9 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shophere/constants/error_handler.dart';
 import 'package:shophere/constants/global_variables.dart';
 import 'package:shophere/constants/utils.dart';
+import 'package:shophere/features/auth/screens/auth_screen.dart';
 import 'package:shophere/models/order.dart';
 import 'package:shophere/models/product.dart';
 import 'package:shophere/providers/user_provider.dart';
@@ -41,5 +43,16 @@ class AccountServices{
      showSnackBar(context, e.toString());
   }
   return orderList;
+}
+
+void logout(BuildContext context)async{
+try {
+  SharedPreferences pref = await SharedPreferences.getInstance();
+  await pref.setString('x-auth-token', '');
+  Navigator.pushNamedAndRemoveUntil
+  (context, AuthScreen.routeName, (route) => false,);
+} catch (e) {
+  showSnackBar(context, e.toString());
+}
 }
 }

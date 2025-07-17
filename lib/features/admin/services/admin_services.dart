@@ -7,12 +7,16 @@ import 'package:provider/provider.dart';
 import 'package:shophere/constants/error_handler.dart';
 import 'package:shophere/constants/global_variables.dart';
 import 'package:shophere/constants/utils.dart';
+import 'package:shophere/features/admin/models/sales.dart';
 import 'package:shophere/features/admin/screens/products_screen.dart';
+import 'package:shophere/models/order.dart';
 import 'package:shophere/models/product.dart';
 import 'package:http/http.dart' as http;
 import 'package:shophere/providers/user_provider.dart';
 
 class AdminServices{
+
+
   void sellProduct({
     required BuildContext context,
     required String name,
@@ -88,6 +92,33 @@ class AdminServices{
    return productList;
   }
 
+  Future<List<Order>> fetchAllOrders(BuildContext context) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    List<Order> orderList = [];
+  try {
+    http.Response res = await http.get(Uri.parse('$uri/admin/orders'),
+    headers : {
+        'Content-type': 'application/json; charset=UTF-8',
+          'x-auth-token' : userProvider.user.token,
+    });
+     httpErrorHandle(response: res, context: context, onSuccess: (){
+          for (int i = 0; i < jsonDecode(res.body).length; i++) {
+            orderList.add(
+              Order.fromJson(
+                jsonEncode(
+                  jsonDecode(res.body)[i],
+                ),
+              ),
+            );
+          }
+        });
+  } catch (e) {
+    
+    showSnackBar(context, e.toString());
+  }
+   return orderList;
+  }
+
   void deleteProduct({
     required BuildContext context,
     required Product product,
@@ -117,4 +148,71 @@ class AdminServices{
         showSnackBar(context, e.toString());
       }
 }
+
+void changeOrderStatus({
+    required BuildContext context,
+    required int status,
+    required Order order,
+    required VoidCallback onSuccess,
+  }) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    try {
+      http.Response res = await http.post(
+        Uri.parse('$uri/admin/change-order-status'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+        body: jsonEncode({
+          'id': order.id,
+          'status': status,
+        }),
+      );
+
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: onSuccess,
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
+
+  //earnings
+   Future<Map<String, dynamic>> getEarnings(BuildContext context) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    List<Sales> sales = [];
+    int totalEarning = 0;
+    try {
+      http.Response res =
+          await http.get(Uri.parse('$uri/admin/analytics'), headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': userProvider.user.token,
+      });
+
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          var response = jsonDecode(res.body);
+          totalEarning = response['totalEarnings'];
+          sales = [
+            Sales('Mobiles', response['mobileEarnings']),
+            Sales('Essentials', response['essentialEarnings']),
+            Sales('Books', response['booksEarnings']),
+            Sales('Appliances', response['applianceEarnings']),
+            Sales('Fashion', response['fashionEarnings']),
+          ];
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+    return {
+      'sales': sales,
+      'totalEarnings': totalEarning,
+    };
+  }
 }
