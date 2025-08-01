@@ -8,6 +8,7 @@ import 'package:shophere/common/widgets/custom_button.dart';
 import 'package:shophere/common/widgets/custom_textfield.dart';
 import 'package:shophere/constants/global_variables.dart';
 import 'package:shophere/constants/utils.dart';
+import 'package:shophere/features/account/services/account_services.dart';
 import 'package:shophere/features/admin/services/admin_services.dart';
 
 class AddProductScreen extends StatefulWidget {
@@ -24,6 +25,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   final TextEditingController priceController = TextEditingController();
   final TextEditingController quantityController = TextEditingController();
   final adminServices = AdminServices();
+  
    String category = 'Mobiles';
   List<File> images = [];
   final _addProductFormKey = GlobalKey<FormState>();

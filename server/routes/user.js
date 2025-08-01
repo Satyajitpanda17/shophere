@@ -81,6 +81,7 @@ userRouter.post("/api/save-address", auth, async (req,res) => {
 
 userRouter.post("/api/place-order", auth, async (req,res) => {
   try {
+    console.log("Order body : ", req.body);
     const { cart, totalPrice, address } = req.body;
     let products = [];
 
@@ -116,7 +117,7 @@ userRouter.post("/api/place-order", auth, async (req,res) => {
 
 userRouter.get("/api/orders/me", auth, async(req,res) => {
   try{
-    let order = Order.findById({userId : req.user});
+    let order = Order.findById({userId : req.user}).lean();
     if(!order){
       res.status(400).json({msg : "No order found on this id"});
     }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shophere/constants/global_variables.dart';
+import 'package:shophere/features/account/services/account_services.dart';
 import 'package:shophere/features/admin/screens/analytics_screen.dart';
 import 'package:shophere/features/admin/screens/orders_screen.dart';
 import 'package:shophere/features/admin/screens/products_screen.dart';
@@ -28,6 +29,7 @@ class _AdminScreenState extends State<AdminScreen> {
       _page = page;
     });
   }
+ 
 
 
   @override
@@ -52,11 +54,14 @@ class _AdminScreenState extends State<AdminScreen> {
                   color: Colors.black,
                 ),
               ),
-              const Text( 'Admin',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
+              GestureDetector(
+                child: const Text( 'Admin',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
+                onTap: () => AccountServices().logout(context),
               ),
           ],
         ),

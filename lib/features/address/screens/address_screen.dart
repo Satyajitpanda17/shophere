@@ -56,43 +56,101 @@ final TextEditingController flatBuildingController = TextEditingController();
     cityController.dispose();
   }
 
-   void onGooglePayResult(res) {
-    if (Provider.of<UserProvider>(context, listen: false)
-        .user
-        .address
-        .isEmpty) {
-      addressServices.saveUserAddress(
-          context: context, address: addressToBeUsed);
+  //  void onGooglePayResult(res) {
+  //   final userAddress = Provider.of<UserProvider>(context, listen: false).user.address;
+
+  // // Call payPressed to assign addressToBeUsed
+  // payPressed(userAddress);
+
+  //   if (Provider.of<UserProvider>(context, listen: false)
+  //       .user
+  //       .address
+  //       .isEmpty) {
+  //     addressServices.saveUserAddress(
+  //         context: context, address: addressToBeUsed);
+  //   }
+  //   addressServices.placeOrder(
+  //     context: context,
+  //     address: addressToBeUsed,
+  //     totalSum: double.parse(widget.totalAmount),
+  //   );
+  // }
+  void onGooglePayResult(res) {
+  final userAddress = Provider.of<UserProvider>(context, listen: false).user.address;
+
+  try {
+    payPressed(userAddress); // make sure addressToBeUsed is assigned
+
+    if (addressToBeUsed.isEmpty) {
+      showSnackBar(context, 'Please enter a valid address');
+      return;
     }
+
+    addressServices.saveUserAddress(
+      context: context,
+      address: addressToBeUsed,
+    );
+print("Address to be used: $addressToBeUsed");
+
     addressServices.placeOrder(
       context: context,
       address: addressToBeUsed,
       totalSum: double.parse(widget.totalAmount),
     );
+  } catch (e) {
+    showSnackBar(context, e.toString());
   }
+}
 
-  void payPressed(String addressFromProvider){
-    addressToBeUsed = "";
 
-    bool isForm = flatBuildingController.text.isNotEmpty ||
-        areaController.text.isNotEmpty ||
-        pincodeController.text.isNotEmpty ||
-        cityController.text.isNotEmpty ||
-        stateController.text.isNotEmpty;
+  // void payPressed(String addressFromProvider){
+  //   addressToBeUsed = "";
 
-    if (isForm) {
-      if (_addressFormKey.currentState!.validate()) {
+  //   bool isForm = flatBuildingController.text.isNotEmpty ||
+  //       areaController.text.isNotEmpty ||
+  //       pincodeController.text.isNotEmpty ||
+  //       cityController.text.isNotEmpty ||
+  //       stateController.text.isNotEmpty;
+
+  //   if (isForm) {
+  //     if (_addressFormKey.currentState!.validate()) {
+  //       addressToBeUsed =
+  //           '${flatBuildingController.text}, ${areaController.text}, ${cityController.text} - ${pincodeController.text} - ${stateController.text}';
+  //     } else {
+  //       throw Exception('Please enter all the values!');
+  //     }
+  //   } else if (addressFromProvider.isNotEmpty) {
+  //     addressToBeUsed = addressFromProvider;
+  //   } else {
+  //     showSnackBar(context, 'ERROR');
+  //   }
+  // }
+  void payPressed(String addressFromProvider) {
+  addressToBeUsed = "";
+
+  bool isFormFilled = flatBuildingController.text.trim().isNotEmpty &&
+      areaController.text.trim().isNotEmpty &&
+      pincodeController.text.trim().isNotEmpty &&
+      cityController.text.trim().isNotEmpty &&
+      stateController.text.trim().isNotEmpty;
+
+  if (isFormFilled) {
+    if (_addressFormKey.currentState!.validate()) {
+     setState(() {
         addressToBeUsed =
-            '${flatBuildingController.text}, ${areaController.text}, ${cityController.text} - ${pincodeController.text} - ${stateController.text}';
+            '${flatBuildingController.text.trim()}, ${areaController.text.trim()}, ${cityController.text.trim()} - ${pincodeController.text.trim()} - ${stateController.text.trim()}';
+      });
       } else {
-        throw Exception('Please enter all the values!');
-      }
-    } else if (addressFromProvider.isNotEmpty) {
-      addressToBeUsed = addressFromProvider;
-    } else {
-      showSnackBar(context, 'ERROR');
+      throw Exception('Please fill out all address fields correctly.');
     }
+  } else if (addressFromProvider.isNotEmpty) {
+    addressToBeUsed = addressFromProvider;
+  } else {
+    throw Exception('No address provided.');
   }
+  print("✅ Assigned addressToBeUsed: $addressToBeUsed");
+}
+
 
   @override
   Widget build(BuildContext context) {

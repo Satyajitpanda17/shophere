@@ -57,8 +57,9 @@ class AddressServices {
           'address': address,
            'totalPrice': totalSum,
       }),
+  
       );
-
+ print(res.body);
       httpErrorHandle(response: res, 
       context: context, 
       onSuccess: (){

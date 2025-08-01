@@ -30,5 +30,5 @@ mongoose
   });
 
 // start server
-app.listen(3000, '0.0.0.0', () => console.log("Server running on port 3000"));
+app.listen(PORT, '0.0.0.0', () => console.log("Server running on port 3000"));
 

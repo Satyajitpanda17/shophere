@@ -35,7 +35,7 @@ class AccountServices{
       );
     });
    }else{
-    //  print('Error: ${res.statusCode}, Body: ${res.body}');
+    print('Error: ${res.statusCode}, Body: ${res.body}');
   showSnackBar(context, 'Failed to fetch products');
    }
   } catch (e) {
